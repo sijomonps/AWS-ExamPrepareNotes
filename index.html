@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Practical Exam Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #1a2236;
+    --border: #1e3a5f;
+    --accent: #f97316;
+    --accent2: #3b82f6;
+    --accent3: #22d3ee;
+    --green: #22c55e;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --code-bg: #0d1117;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+    padding: 48px 32px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(249,115,22,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.4);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  h1 span { color: var(--accent); }
+  .subtitle { color: var(--muted); font-size: 0.95rem; font-weight: 300; }
+
+  .toc {
+    max-width: 900px; margin: 32px auto; padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+  }
+  .toc a {
+    display: block;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .toc a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .toc a .num { display: block; color: var(--accent2); font-family: 'Space Mono', monospace; font-size: 10px; margin-bottom: 3px; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 16px 24px 60px; }
+
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 28px;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+  .section-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(90deg, rgba(59,130,246,0.07) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  .sec-num {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent3));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 1.1rem; font-weight: 700; }
+  .section-header .name-tag {
+    margin-left: auto;
+    background: rgba(249,115,22,0.12);
+    border: 1px solid rgba(249,115,22,0.3);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .section-body { padding: 20px 24px; }
+
+  .step {
+    display: flex; gap: 14px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .step-num {
+    width: 26px; height: 26px; flex-shrink: 0;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    margin-top: 2px;
+  }
+  .step p { font-size: 0.9rem; }
+  .step strong { color: var(--accent3); }
+
+  code, .code-inline {
+    font-family: 'Space Mono', monospace;
+    background: var(--code-bg);
+    border: 1px solid #1e3a5f;
+    padding: 1px 7px;
+    border-radius: 5px;
+    font-size: 0.82em;
+    color: #f97316;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    overflow-x: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    color: #e2e8f0;
+  }
+  pre .comment { color: #64748b; }
+  pre .cmd { color: #22d3ee; }
+  pre .str { color: #22c55e; }
+  pre .kw { color: #a78bfa; }
+
+  .screenshot-box {
+    background: rgba(34,197,94,0.05);
+    border: 1px dashed rgba(34,197,94,0.35);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 14px;
+  }
+  .screenshot-box .label {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    color: var(--green);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .screenshot-box ul { list-style: none; padding: 0; }
+  .screenshot-box li {
+    font-size: 0.85rem;
+    color: var(--muted);
+    padding: 3px 0;
+  }
+  .screenshot-box li::before { content: '📸 '; }
+
+  .tip-box {
+    background: rgba(249,115,22,0.06);
+    border: 1px solid rgba(249,115,22,0.25);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: #fbbf24;
+  }
+  .tip-box::before { content: '💡 Tip: '; font-weight: 700; }
+
+  .config-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .config-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+  .config-item .key {
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin-bottom: 3px;
+    font-family: 'Space Mono', monospace;
+  }
+  .config-item .val { font-weight: 600; color: var(--accent3); }
+
+  footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="badge">CA2 · AWS PRACTICAL</div>
+    <h1>AWS Exam <span>Step-by-Step</span> Guide</h1>
+    <p class="subtitle">14 Sections · Ubuntu OS · VPC · CloudWatch · AMI · GitHub App Deploy</p>
+  </div>
+</header>
+
+<div class="toc">
+  <a href="#s0"><span class="num">00</span>VPC Setup</a>
+  <a href="#s1"><span class="num">01</span>Launch Template</a>
+  <a href="#s2"><span class="num">02</span>Load Balancer</a>
+  <a href="#s3"><span class="num">03</span>Target Group</a>
+  <a href="#s4"><span class="num">04</span>Auto Scaling</a>
+  <a href="#s5"><span class="num">05</span>Scaling Policy</a>
+  <a href="#s6"><span class="num">06</span>EBS Volume</a>
+  <a href="#s7"><span class="num">07</span>EFS</a>
+  <a href="#s8"><span class="num">08</span>S3 Bucket</a>
+  <a href="#s9"><span class="num">09</span>Storage Mount</a>
+  <a href="#s10"><span class="num">10</span>Target Check</a>
+  <a href="#s11"><span class="num">11</span>AMI</a>
+  <a href="#s12"><span class="num">12</span>CloudWatch</a>
+  <a href="#s13"><span class="num">13</span>GitHub App + DB</a>
+</div>
+
+<main>
+
+<!-- SECTION 0 — VPC -->
+<div class="section" id="s0">
+  <div class="section-header">
+    <div class="sec-num">00</div>
+    <h2>VPC Setup</h2>
+    <div class="name-tag">Web-VPC</div>
+  </div>
+  <div class="section-body">
+    <p style="color:var(--muted); font-size:0.85rem; margin-bottom:14px;">VPC is your private network inside AWS. All your resources (EC2, ALB, ASG) live inside it.</p>
+    <div class="step"><div class="step-num">1</div><p>Search <strong>VPC</strong> in the top bar → Click <strong>Your VPCs</strong> → <strong>Create VPC</strong></p></div>
+    <div class="step"><div class="step-num">2</div><p>Select <strong>VPC and more</strong> (this auto-creates subnets, route tables, and internet gateway)</p></div>
+    <div class="step"><div class="step-num">3</div><p>Name tag: <code>Web-VPC</code></p></div>
+    <div class="step"><div class="step-num">4</div><p>IPv4 CIDR: <code>10.0.0.0/16</code></p></div>
+    <div class="step"><div class="step-num">5</div><p>Number of AZs: <strong>2</strong>, Public subnets: <strong>2</strong>, Private subnets: <strong>2</strong></p></div>
+    <div class="step"><div class="step-num">6</div><p>NAT Gateways: <strong>None</strong> (to avoid cost) → Click <strong>Create VPC</strong></p></div>
+    <div class="tip-box">Use this VPC when creating your ALB, ASG, and EC2 instances. Always pick the <strong>public subnets</strong> for internet-facing resources.</div>
+    <p style="font-size:0.85rem; margin: 16px 0 8px; font-weight:600; color:var(--accent3);">Key VPC Concepts to Know:</p>
+    <div class="config-grid">
+      <div class="config-item"><div class="key">SUBNET</div><div class="val">Sub-division of VPC (public/private)</div></div>
+      <div class="config-item"><div class="key">INTERNET GATEWAY</div><div class="val">Allows internet traffic in/out</div></div>
+      <div class="config-item"><div class="key">ROUTE TABLE</div><div class="val">Rules for where traffic goes</div></div>
+      <div class="config-item"><div class="key">SECURITY GROUP</div><div class="val">Firewall for each resource</div></div>
+    </div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED (if asked)</div>
+      <ul>
+        <li>VPC name (Web-VPC) with CIDR visible</li>
+        <li>Subnets list showing public subnets</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="sec-num">01</div>
+    <h2>Launch Template</h2>
+    <div class="name-tag">Web-LT</div>
+  </div>
+  <div class="section-body">
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>EC2</strong> → Left sidebar → <strong>Launch Templates</strong> → Click <strong>Create launch template</strong></p></div>
+    <div class="step"><div class="step-num">2</div><p>Enter name: <code>Web-LT</code></p></div>
+    <div class="step"><div class="step-num">3</div><p>Under <strong>Application and OS Images</strong> → Search and select <strong>Amazon Linux 2023</strong> AMI</p></div>
+    <div class="step"><div class="step-num">4</div><p>Instance type: <strong>t2.micro</strong></p></div>
+    <div class="step"><div class="step-num">5</div><p>Under <strong>Network settings</strong> → Create security group → Name it <code>Web-SG</code></p></div>
+    <div class="step"><div class="step-num">6</div><p>In <strong>Inbound rules</strong> → Add two rules: <strong>SSH (port 22)</strong> and <strong>HTTP (port 80)</strong>, both from <code>0.0.0.0/0</code></p></div>
+    <div class="step"><div class="step-num">7</div><p>Scroll down to <strong>Advanced details</strong> → Paste this in <strong>User Data</strong>:</p></div>
+    <pre><span class="comment">#!/bin/bash</span>
+<span class="cmd">dnf install</span> -y nginx
+<span class="cmd">systemctl enable</span> nginx
+<span class="cmd">systemctl start</span> nginx
+<span class="cmd">echo</span> <span class="str">"Hello from $(hostname)"</span> > /usr/share/nginx/html/index.html</pre>
+    <div class="step"><div class="step-num">8</div><p>Click <strong>Create launch template</strong></p></div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>Launch template name (Web-LT)</li>
+        <li>Instance type (t2.micro)</li>
+        <li>Security group (Web-SG with SSH + HTTP)</li>
+        <li>User Data section</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="sec-num">02</div>
+    <h2>Application Load Balancer</h2>
+    <div class="name-tag">Web-ALB</div>
+  </div>
+  <div class="section-body">
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>EC2</strong> → Left sidebar → <strong>Load Balancers</strong> → <strong>Create load balancer</strong></p></div>
+    <div class="step"><div class="step-num">2</div><p>Choose <strong>Application Load Balancer</strong></p></div>
+    <div class="step"><div class="step-num">3</div><p>Name: <code>Web-ALB</code></p></div>
+    <div class="step"><div class="step-num">4</div><p>Scheme: <strong>Internet-facing</strong> (not internal)</p></div>
+    <div class="step"><div class="step-num">5</div><p>Under <strong>Listeners</strong> → Protocol: <strong>HTTP</strong>, Port: <strong>80</strong></p></div>
+    <div class="step"><div class="step-num">6</div><p>Select at least <strong>2 Availability Zones</strong> (select your VPC and subnets)</p></div>
+    <div class="step"><div class="step-num">7</div><p>For security group → select <code>Web-SG</code></p></div>
+    <div class="step"><div class="step-num">8</div><p>For now, you can skip target group (we create it next) → click <strong>Create load balancer</strong></p></div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>Load Balancer name (Web-ALB)</li>
+        <li>Scheme (Internet-facing)</li>
+        <li>Listener (HTTP port 80)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="sec-num">03</div>
+    <h2>Target Group</h2>
+    <div class="name-tag">Web-TG</div>
+  </div>
+  <div class="section-body">
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>EC2</strong> → Left sidebar → <strong>Target Groups</strong> → <strong>Create target group</strong></p></div>
+    <div class="step"><div class="step-num">2</div><p>Target type: <strong>Instances</strong></p></div>
+    <div class="step"><div class="step-num">3</div><p>Name: <code>Web-TG</code></p></div>
+    <div class="step"><div class="step-num">4</div><p>Protocol: <strong>HTTP</strong>, Port: <strong>80</strong></p></div>
+    <div class="step"><div class="step-num">5</div><p>Under <strong>Health checks</strong> → Health check path: <code>/</code></p></div>
+    <div class="step"><div class="step-num">6</div><p>Click <strong>Next</strong> → Skip adding instances for now → Click <strong>Create target group</strong></p></div>
+    <div class="tip-box">After creating Web-TG, go back to your Load Balancer (Web-ALB) → Listeners tab → Edit listener → Forward to Web-TG</div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>Target group name (Web-TG)</li>
+        <li>Health check path (/)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="sec-num">04</div>
+    <h2>Auto Scaling Group</h2>
+    <div class="name-tag">Web-ASG</div>
+  </div>
+  <div class="section-body">
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>EC2</strong> → Left sidebar → <strong>Auto Scaling Groups</strong> → <strong>Create Auto Scaling group</strong></p></div>
+    <div class="step"><div class="step-num">2</div><p>Name: <code>Web-ASG</code></p></div>
+    <div class="step"><div class="step-num">3</div><p>Launch template: Select <code>Web-LT</code> → Click <strong>Next</strong></p></div>
+    <div class="step"><div class="step-num">4</div><p>Choose your <strong>VPC</strong> and select at least <strong>2 subnets</strong> → Click <strong>Next</strong></p></div>
+    <div class="step"><div class="step-num">5</div><p>Attach to load balancer → Select <strong>Attach to an existing load balancer</strong> → Choose <code>Web-TG</code></p></div>
+    <div class="step"><div class="step-num">6</div><p>Set capacity:</p></div>
+    <div class="config-grid">
+      <div class="config-item"><div class="key">MINIMUM</div><div class="val">2</div></div>
+      <div class="config-item"><div class="key">DESIRED</div><div class="val">2</div></div>
+      <div class="config-item"><div class="key">MAXIMUM</div><div class="val">4</div></div>
+    </div>
+    <div class="step"><div class="step-num">7</div><p>Click <strong>Next</strong> through remaining steps → <strong>Create Auto Scaling group</strong></p></div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>ASG name (Web-ASG)</li>
+        <li>Capacity (Min:2, Desired:2, Max:4)</li>
+        <li>Target group attachment (Web-TG)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="sec-num">05</div>
+    <h2>Scaling Policy</h2>
+    <div class="name-tag">Web-CPU-Policy</div>
+  </div>
+  <div class="section-body">
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>Auto Scaling Groups</strong> → Click on <code>Web-ASG</code></p></div>
+    <div class="step"><div class="step-num">2</div><p>Click the <strong>Automatic scaling</strong> tab → <strong>Create dynamic scaling policy</strong></p></div>
+    <div class="step"><div class="step-num">3</div><p>Policy type: <strong>Target tracking scaling</strong></p></div>
+    <div class="step"><div class="step-num">4</div><p>Scaling policy name: <code>Web-CPU-Policy</code></p></div>
+    <div class="step"><div class="step-num">5</div><p>Metric type: <strong>Average CPU utilization</strong></p></div>
+    <div class="step"><div class="step-num">6</div><p>Target value: <strong>50</strong> (scale when CPU goes above 50%)</p></div>
+    <div class="step"><div class="step-num">7</div><p>Click <strong>Create</strong></p></div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>Policy name (Web-CPU-Policy)</li>
+        <li>CPU metric selected</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6 -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="sec-num">06</div>
+    <h2>EBS Volume</h2>
+    <div class="name-tag">Web-EBS</div>
+  </div>
+  <div class="section-body">
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>EC2</strong> → Left sidebar → <strong>Volumes</strong> → <strong>Create volume</strong></p></div>
+    <div class="step"><div class="step-num">2</div><p>Size: <strong>8 GiB</strong> (default is fine)</p></div>
+    <div class="step"><div class="step-num">3</div><p><strong>Availability Zone</strong>: Must match the AZ of your EC2 instance</p></div>
+    <div class="step"><div class="step-num">4</div><p>Click <strong>Create volume</strong> → After created, add a Name tag: <code>Web-EBS</code></p></div>
+    <div class="step"><div class="step-num">5</div><p>Select the volume → <strong>Actions</strong> → <strong>Attach volume</strong> → Choose one of your running instances → Click <strong>Attach</strong></p></div>
+    <div class="tip-box">The AZ of the EBS volume MUST match the AZ of the instance. If it says "no instances found", the AZ is wrong.</div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>Volume name (Web-EBS)</li>
+        <li>Attached instance ID visible</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7 -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="sec-num">07</div>
+    <h2>EFS (Elastic File System)</h2>
+    <div class="name-tag">Web-EFS</div>
+  </div>
+  <div class="section-body">
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>EFS</strong> service (search in top bar) → <strong>Create file system</strong></p></div>
+    <div class="step"><div class="step-num">2</div><p>Name: <code>Web-EFS</code></p></div>
+    <div class="step"><div class="step-num">3</div><p>VPC: Select your VPC → Click <strong>Create</strong></p></div>
+    <div class="step"><div class="step-num">4</div><p>Click on <code>Web-EFS</code> → Go to <strong>Network</strong> tab → You will see <strong>mount targets</strong> for each AZ</p></div>
+    <div class="tip-box">Mount targets allow your EC2 instances to connect to EFS. Make sure the security group allows NFS (port 2049) traffic.</div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>File system name (Web-EFS)</li>
+        <li>Mount targets shown (with AZ info)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8 -->
+<div class="section" id="s8">
+  <div class="section-header">
+    <div class="sec-num">08</div>
+    <h2>S3 Bucket</h2>
+    <div class="name-tag">web-static-storage-&lt;yourname&gt;</div>
+  </div>
+  <div class="section-body">
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>S3</strong> service → <strong>Create bucket</strong></p></div>
+    <div class="step"><div class="step-num">2</div><p>Bucket name: <code>web-static-storage-sijomon</code> (use your actual name, all lowercase)</p></div>
+    <div class="step"><div class="step-num">3</div><p>Region: Select your region</p></div>
+    <div class="step"><div class="step-num">4</div><p>Leave everything else default → <strong>Create bucket</strong></p></div>
+    <div class="tip-box">S3 bucket names must be globally unique and lowercase only. No spaces or uppercase allowed.</div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>Bucket name visible (web-static-storage-yourname)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9 -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <div class="sec-num">09</div>
+    <h2>Storage Mount (SSH into EC2)</h2>
+    <div class="name-tag">df -h</div>
+  </div>
+  <div class="section-body">
+    <p style="color:var(--muted); font-size:0.85rem; margin-bottom:14px;">You need to SSH into your EC2 instance and run these commands.</p>
+
+    <p style="font-size:0.88rem; margin-bottom:10px;"><strong>Step A — Mount EBS to /data</strong></p>
+    <pre><span class="comment"># Check what the EBS device name is</span>
+<span class="cmd">lsblk</span>
+<span class="comment"># You will see something like /dev/xvdf or /dev/nvme1n1</span>
+
+<span class="comment"># Format the disk (only first time!)</span>
+<span class="cmd">sudo mkfs.ext4</span> /dev/xvdf
+
+<span class="comment"># Create the mount point</span>
+<span class="cmd">sudo mkdir</span> /data
+
+<span class="comment"># Mount it</span>
+<span class="cmd">sudo mount</span> /dev/xvdf /data
+
+<span class="comment"># Verify</span>
+<span class="cmd">df -h</span></pre>
+
+    <p style="font-size:0.88rem; margin: 16px 0 10px;"><strong>Step B — Mount EFS to /shared</strong></p>
+    <pre><span class="comment"># Install EFS utilities</span>
+<span class="cmd">sudo dnf install</span> -y amazon-efs-utils
+
+<span class="comment"># Create the mount point</span>
+<span class="cmd">sudo mkdir</span> /shared
+
+<span class="comment"># Go to EFS console → Click Web-EFS → Copy the mount command</span>
+<span class="comment"># It will look like this (replace fs-xxxxxxxx with your EFS ID):</span>
+<span class="cmd">sudo mount</span> -t efs -o tls fs-xxxxxxxx:/ /shared
+
+<span class="comment"># Verify both /data and /shared are visible</span>
+<span class="cmd">df -h</span></pre>
+
+    <div class="tip-box">After running df -h, look for /data and /shared in the output. Take the screenshot of that terminal output.</div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>/data visible in df -h output</li>
+        <li>/shared visible in df -h output</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 10 -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <div class="sec-num">10</div>
+    <h2>Target Group Health Check</h2>
+    <div class="name-tag">Web-TG</div>
+  </div>
+  <div class="section-body">
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>EC2</strong> → <strong>Target Groups</strong> → Click on <code>Web-TG</code></p></div>
+    <div class="step"><div class="step-num">2</div><p>Click the <strong>Targets</strong> tab at the bottom</p></div>
+    <div class="step"><div class="step-num">3</div><p>You should see your 2 instances (from ASG) with status <strong>Healthy</strong></p></div>
+    <div class="step"><div class="step-num">4</div><p>Copy the <strong>DNS name</strong> of Web-ALB → Paste in browser → You should see:<br><code>Hello from ip-xxx-xxx-xxx-xxx</code></p></div>
+    <div class="tip-box">If instances show "unhealthy", wait 2-3 minutes. Nginx needs time to start. Also make sure port 80 is open in Web-SG.</div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>Both instances showing "Healthy" status in Web-TG</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 11 — AMI -->
+<div class="section" id="s11">
+  <div class="section-header">
+    <div class="sec-num">11</div>
+    <h2>Create AMI (Machine Image)</h2>
+    <div class="name-tag">Web-AMI</div>
+  </div>
+  <div class="section-body">
+    <p style="color:var(--muted); font-size:0.85rem; margin-bottom:14px;">An AMI is a snapshot/copy of your EC2 instance. You can use it to launch identical instances quickly — very useful for scaling.</p>
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>EC2</strong> → <strong>Instances</strong> → Select one of your running instances</p></div>
+    <div class="step"><div class="step-num">2</div><p>Click <strong>Actions</strong> → <strong>Image and templates</strong> → <strong>Create image</strong></p></div>
+    <div class="step"><div class="step-num">3</div><p>Image name: <code>Web-AMI</code></p></div>
+    <div class="step"><div class="step-num">4</div><p>Leave everything else default → Click <strong>Create image</strong></p></div>
+    <div class="step"><div class="step-num">5</div><p>Go to <strong>AMIs</strong> (left sidebar under Images) → Wait for status to change to <strong>Available</strong></p></div>
+    <div class="tip-box">AMI creation takes 2–5 minutes. You can use this AMI later in your Launch Template instead of the default Amazon Linux AMI — it will already have nginx and your app installed.</div>
+    <p style="font-size:0.85rem; margin: 16px 0 8px; font-weight:600; color:var(--accent3);">Why AMI is useful in exam:</p>
+    <pre><span class="comment"># Without AMI → every new instance runs User Data script from scratch</span>
+<span class="comment"># With AMI  → every new instance already has nginx + your app ready</span>
+<span class="comment"># Faster boot, consistent environment ✓</span></pre>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>AMI name (Web-AMI) with status "Available"</li>
+        <li>Source instance ID visible</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 12 — CloudWatch -->
+<div class="section" id="s12">
+  <div class="section-header">
+    <div class="sec-num">12</div>
+    <h2>CloudWatch — Monitoring</h2>
+    <div class="name-tag">Web-CPU-Alarm</div>
+  </div>
+  <div class="section-body">
+    <p style="color:var(--muted); font-size:0.85rem; margin-bottom:14px;">CloudWatch monitors your AWS resources. You can set alarms when CPU, memory, or other metrics go too high.</p>
+    <p style="font-size:0.88rem; margin-bottom:10px; font-weight:600; color:var(--accent3);">Part A — View EC2 Metrics</p>
+    <div class="step"><div class="step-num">1</div><p>Go to <strong>CloudWatch</strong> → Left sidebar → <strong>Metrics</strong> → <strong>All metrics</strong></p></div>
+    <div class="step"><div class="step-num">2</div><p>Click <strong>EC2</strong> → <strong>Per-Instance Metrics</strong> → Search <strong>CPUUtilization</strong> → Select your instance</p></div>
+    <div class="step"><div class="step-num">3</div><p>You will see a graph of CPU usage over time</p></div>
+
+    <p style="font-size:0.88rem; margin: 16px 0 10px; font-weight:600; color:var(--accent3);">Part B — Create an Alarm</p>
+    <div class="step"><div class="step-num">4</div><p>Go to <strong>CloudWatch</strong> → <strong>Alarms</strong> → <strong>Create alarm</strong></p></div>
+    <div class="step"><div class="step-num">5</div><p>Click <strong>Select metric</strong> → EC2 → Per-Instance Metrics → Select <strong>CPUUtilization</strong> for your instance → Click <strong>Select metric</strong></p></div>
+    <div class="step"><div class="step-num">6</div><p>Threshold: <strong>Greater than 70</strong> (alarm when CPU &gt; 70%)</p></div>
+    <div class="step"><div class="step-num">7</div><p>Skip notification for now → Alarm name: <code>Web-CPU-Alarm</code> → Click <strong>Create alarm</strong></p></div>
+
+    <p style="font-size:0.88rem; margin: 16px 0 10px; font-weight:600; color:var(--accent3);">Part C — View ASG Metrics (Dashboard)</p>
+    <div class="step"><div class="step-num">8</div><p>Go to <strong>CloudWatch</strong> → <strong>Dashboards</strong> → <strong>Create dashboard</strong> → Name it <code>Web-Dashboard</code></p></div>
+    <div class="step"><div class="step-num">9</div><p>Add a widget → Line chart → Select EC2 CPUUtilization → <strong>Save</strong></p></div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>Alarm name (Web-CPU-Alarm) with threshold visible</li>
+        <li>Metric graph showing CPUUtilization</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 13 — GitHub App + Database -->
+<div class="section" id="s13">
+  <div class="section-header">
+    <div class="sec-num">13</div>
+    <h2>Deploy App from GitHub + Database</h2>
+    <div class="name-tag">GitHub + MySQL</div>
+  </div>
+  <div class="section-body">
+    <p style="color:var(--muted); font-size:0.85rem; margin-bottom:16px;">This is the "simple website with database backend" part. The plan: store your website code on GitHub → clone it on EC2 → connect it to a MySQL database.</p>
+
+    <p style="font-size:0.88rem; margin-bottom:10px; font-weight:600; color:var(--accent3);">Step A — Create a simple app on GitHub (do this before exam)</p>
+    <p style="font-size:0.85rem; color:var(--muted); margin-bottom:10px;">Create a repo on GitHub with these files:</p>
+    <pre><span class="comment"># File: index.html</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;My AWS App&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello from AWS!&lt;/h1&gt;
+  &lt;p&gt;Deployed via GitHub on EC2&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+    <p style="font-size:0.88rem; margin: 16px 0 10px; font-weight:600; color:var(--accent3);">Step B — SSH into EC2 and clone the repo</p>
+    <pre><span class="comment"># SSH into your EC2 instance first</span>
+<span class="cmd">ssh</span> -i your-key.pem ec2-user@&lt;your-ec2-ip&gt;
+
+<span class="comment"># Install git (if not already installed)</span>
+<span class="cmd">sudo dnf install</span> -y git
+
+<span class="comment"># Clone your GitHub repo</span>
+<span class="cmd">git clone</span> https://github.com/yourusername/your-repo-name.git
+
+<span class="comment"># Copy files to nginx web root</span>
+<span class="cmd">sudo cp</span> -r your-repo-name/* /usr/share/nginx/html/
+
+<span class="comment"># Restart nginx</span>
+<span class="cmd">sudo systemctl restart</span> nginx</pre>
+
+    <p style="font-size:0.88rem; margin: 16px 0 10px; font-weight:600; color:var(--accent3);">Step C — Install MySQL (Database Backend)</p>
+    <pre><span class="comment"># Install MySQL server</span>
+<span class="cmd">sudo dnf install</span> -y mysql-server
+
+<span class="comment"># Start and enable MySQL</span>
+<span class="cmd">sudo systemctl enable</span> --now mysqld
+
+<span class="comment"># Secure the installation (set root password)</span>
+<span class="cmd">sudo mysql_secure_installation</span>
+
+<span class="comment"># Login to MySQL</span>
+<span class="cmd">sudo mysql</span> -u root -p
+
+<span class="comment"># Inside MySQL — create a database and table</span>
+<span class="str">CREATE DATABASE</span> webappdb;
+<span class="str">USE</span> webappdb;
+<span class="str">CREATE TABLE</span> users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100)
+);
+<span class="str">INSERT INTO</span> users (name, email) <span class="str">VALUES</span> (<span class="str">'Sijomon'</span>, <span class="str">'test@email.com'</span>);
+<span class="str">SELECT * FROM</span> users;
+<span class="kw">EXIT;</span></pre>
+
+    <p style="font-size:0.88rem; margin: 16px 0 10px; font-weight:600; color:var(--accent3);">Step D — Use User Data to auto-deploy from GitHub (in Launch Template)</p>
+    <p style="font-size:0.84rem; color:var(--muted); margin-bottom:8px;">Update your <code>Web-LT</code> User Data to this so every new instance auto-clones your repo:</p>
+    <pre><span class="comment">#!/bin/bash</span>
+<span class="cmd">dnf install</span> -y nginx git mysql-server
+<span class="cmd">systemctl enable</span> nginx mysqld
+<span class="cmd">systemctl start</span> nginx mysqld
+
+<span class="comment"># Clone your GitHub repo directly</span>
+<span class="cmd">git clone</span> https://github.com/yourusername/your-repo-name.git /tmp/myapp
+<span class="cmd">cp</span> -r /tmp/myapp/* /usr/share/nginx/html/
+
+<span class="comment"># Show hostname so we know which instance served the request</span>
+<span class="cmd">echo</span> <span class="str">"Served by: $(hostname)"</span> >> /usr/share/nginx/html/index.html</pre>
+
+    <div class="tip-box">Make your GitHub repo PUBLIC so EC2 can clone it without a login. This is the easiest way during exam time.</div>
+    <div class="screenshot-box">
+      <div class="label">📷 SCREENSHOT NEEDED</div>
+      <ul>
+        <li>git clone command running successfully in terminal</li>
+        <li>MySQL SELECT * FROM users showing data</li>
+        <li>Website visible in browser via EC2 IP or ALB DNS</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  Good luck tomorrow! 🚀 · Follow exact names · Take screenshots after each step
+</footer>
+
+</body>
+</html>
